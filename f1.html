@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Frontend (HTML/CSS/JS)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .response {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot Frontend (HTML/CSS/JS)</h1>
+    <textarea id="query" placeholder="Enter your query"></textarea><br>
+    <button onclick="getResponse()">Send Query</button><br>
+    <div id="response" class="response"></div>
+
+    <script>
+        function getResponse() {
+            var query = document.getElementById('query').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:5000/response?query=' + encodeURIComponent(query), true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText).response;
+                        document.getElementById('response').innerHTML = '<strong>Response:</strong> ' + response;
+                    } else {
+                        document.getElementById('response').innerHTML = '<strong>Error:</strong> ' + xhr.statusText;
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
+
